@@ -1,0 +1,122 @@
+
+export default function SnookerTournamentApp() {
+  const [tab, setTab] = React.useState('home');
+
+  const [players] = React.useState([
+    'Ásta','Garðar','Gautur','Gunnar','Gústi',
+    'Hallur','Heiða','Heiðar','Jóhanna','Jón',
+    'Jón H.G','Jón L','Ólafur','Örn','Sævar',
+    'Sigurður','Sigurjón','Sigurmundur','Steinþór','Valgerður'
+  ]);
+
+  const [matches, setMatches] = React.useState([
+    {id:1,date:'05.11',table:1,p1:'Ásta',p2:'Garðar',result:'3-1'},
+    {id:2,date:'05.11',table:2,p1:'Gautur',p2:'Gunnar',result:''},
+    {id:3,date:'06.11',table:1,p1:'Hallur',p2:'Heiða',result:''},
+    {id:4,date:'06.11',table:2,p1:'Sigurður',p2:'Steinþór',result:''}
+  ]);
+
+  const updateResult = (id, value) => {
+    setMatches(matches.map(m => m.id === id ? {...m,result:value} : m));
+  };
+
+  const tabs = [
+    {id:'home',icon:'🏠',label:'Heim'},
+    {id:'games',icon:'🎮',label:'Leikir'},
+    {id:'table',icon:'📊',label:'Tafla'},
+    {id:'bracket',icon:'🏆',label:'Mótatré'}
+  ];
+
+  return (
+    <div className='max-w-md mx-auto min-h-screen bg-green-950 text-white flex flex-col'>
+      <div className='p-4 bg-green-900 sticky top-0'>
+        <h1 className='text-xl font-bold'>🎱 Snooker Tournament</h1>
+      </div>
+
+      <div className='flex-1 p-4 overflow-auto'>
+
+        {tab === 'home' && (
+          <div className='space-y-4'>
+            <div className='bg-green-800 rounded-3xl p-4'>
+              <h2 className='font-bold mb-2'>Næsti leikur</h2>
+              <div className='text-lg'>Ásta vs Garðar</div>
+              <div className='text-sm opacity-80'>19:00 • Borð 1</div>
+            </div>
+
+            <div className='bg-green-800 rounded-3xl p-4'>
+              <h2 className='font-bold mb-2'>Yfirlit móts</h2>
+              <div>👥 20 leikmenn</div>
+              <div>🏅 4 riðlar</div>
+              <div>🎮 40 riðlakeikir</div>
+              <div>🏆 8 komast áfram</div>
+            </div>
+
+            <div className='bg-green-800 rounded-3xl p-4'>
+              <h2 className='font-bold mb-2'>Tilkynningar</h2>
+              <div>✅ Ásta vann Garðar 3-1</div>
+              <div>📅 Ný umferð á föstudag</div>
+            </div>
+          </div>
+        )}
+
+        {tab === 'games' && (
+          <div className='space-y-3'>
+            {matches.map(match => (
+              <div key={match.id} className='bg-green-800 rounded-2xl p-3'>
+                <div className='text-sm'>{match.date} • Borð {match.table}</div>
+                <div className='font-semibold'>{match.p1} vs {match.p2}</div>
+                <input
+                  className='w-full mt-2 rounded p-2 text-black'
+                  placeholder='3-1'
+                  value={match.result}
+                  onChange={(e)=>updateResult(match.id,e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {tab === 'table' && (
+          <div className='bg-green-800 rounded-3xl p-4'>
+            <h2 className='font-bold mb-3'>Riðill A</h2>
+            <div className='space-y-2'>
+              <div>1. Ásta (4 stig)</div>
+              <div>2. Gautur (2 stig)</div>
+              <div>3. Garðar (2 stig)</div>
+              <div>4. Gunnar (0 stig)</div>
+              <div>5. Gústi (0 stig)</div>
+            </div>
+          </div>
+        )}
+
+        {tab === 'bracket' && (
+          <div className='bg-green-800 rounded-3xl p-4'>
+            <h2 className='font-bold mb-4'>8 manna úrslit</h2>
+            <pre className='text-sm whitespace-pre-wrap'>
+Ásta ───┐
+        ├─ Ásta ─┐
+Jón ────┘        │
+                 ├─ ?
+Sigurður ─┐      │
+          ├─ ? ──┘
+Örn ──────┘
+            </pre>
+          </div>
+        )}
+      </div>
+
+      <div className='grid grid-cols-4 bg-green-900 border-t border-green-700'>
+        {tabs.map(t => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`p-3 ${tab===t.id ? 'bg-green-700' : ''}`}
+          >
+            <div>{t.icon}</div>
+            <div className='text-xs'>{t.label}</div>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
